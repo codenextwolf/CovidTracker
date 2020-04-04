@@ -2,6 +2,8 @@ package com.example.covidtracker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -71,6 +73,25 @@ public class MainActivity extends AppCompatActivity {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    public void saveCountry(View view) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", MODE_PRIVATE);
+        String savedCountries = sharedPreferences.getString("saved_countries", "");
+        String searchText = searchBar.getText().toString().toLowerCase();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if(savedCountries.length() > 0) {
+            editor.putString("saved_countries", savedCountries + "," + searchText);
+        } else {
+            editor.putString("saved_countries", searchText);
+        }
+        editor.apply();
+    }
+
+    public void openSavedCountries(View view) {
+        Intent openSavedCountries = new Intent(this, SavedCountriesActivity.class);
+        startActivity(openSavedCountries);
     }
 }
 
